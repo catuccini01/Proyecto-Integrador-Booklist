@@ -1,35 +1,43 @@
-# BookList SPA – Gestor de Libros con Vue.js
+# BookList – Proyecto integrador (Módulos 6 y 7)
 
-Proyecto de evaluación del **Módulo 6: Desarrollo de interfaces interactivas con framework Vue** (Alkemy).
+Proyecto de evaluación de Alkemy, construido sobre dos módulos:
 
-BookList es una SPA (Single Page Application) que permite registrar libros, ver el catálogo, eliminar entradas y revisar el detalle de cada libro, todo sin recargar la página.
+- **Módulo 6: Desarrollo de interfaces interactivas con framework Vue** (componentes, directivas, formularios, eventos y rutas).
+- **Módulo 7: Desarrollo de aplicaciones front-end con framework Vue** (consumo de API, Vuex y Composition API).
+
+BookList es una SPA (Single Page Application) para gestionar un catálogo de libros: permite registrarse e iniciar sesión, ver el catálogo filtrado por categoría, agregar libros, eliminarlos y ver el detalle de cada uno, todo sin recargar la página.
 
 ## Tecnologías
 
-- Vue 3 (Options API)
-- Vue Router 4 (modo hash)
-- Vue CLI 5.0.9
-- ESLint (solo prevención de errores)
-
+- Vue 3 (mezcla de Options API y Composition API con `<script setup>`)
+- Vue Router 4 (modo hash), con una guarda de rutas (`beforeEach`) para proteger `/agregar`
+- Vuex 4, con 3 módulos independientes (`libros`, `filtros`, `auth`)
+- Axios + json-server, como API REST simulada
+- Bootstrap 5 (grid y clases utilitarias)
+- `@lucide/vue` (iconos)
+- Vue CLI 5
 
 ## Funcionalidades
 
-- Añadir libros con título, autor, categoría y descripción (opcional).
-- Vista previa en tiempo real de los datos que se escriben en el formulario.
-- Validación básica: título, autor y categoría son obligatorios.
-- Añadir libros con el botón o presionando **Enter** en los campos Título y Autor.
-- Lista reactiva de libros, con posibilidad de eliminar cada uno.
-- Mensaje "No hay libros disponibles" cuando la lista está vacía.
-- Mostrar u ocultar la descripción de cada libro y el catálogo completo.
-- Navegación entre pantallas con Vue Router, incluyendo una ruta dinámica para el detalle.
+- Registro e inicio de sesión de usuarios, contra una colección `usuarios` en la API simulada. La sesión se guarda en `sessionStorage`, así que se mantiene mientras la pestaña esté abierta.
+- Ruta protegida: `/agregar` solo es accesible si hay sesión iniciada; si no, redirige a `/login` y, al iniciar sesión, vuelve a la página que se quería visitar.
+- Catálogo de libros en la página de Inicio, con imagen de portada, filtrable por categoría.
+- Agregar un libro nuevo desde un formulario en una vista aparte (`/agregar`).
+- Eliminar un libro desde su tarjeta en el catálogo.
+- Ver el detalle de un libro en una ruta dinámica (`/libros/:id`).
+- Vista 404 para cualquier URL que no coincida con una ruta definida.
+- Los libros y los usuarios se guardan a través de una API simulada con `json-server`, no en memoria.
 
 ## Rutas
 
 | Ruta | Vista | Descripción |
 |---|---|---|
-| `/` | `InicioView.vue` | Pantalla de bienvenida con el total de libros registrados |
-| `/libros` | `ListaLibros.vue` | Formulario para añadir libros y catálogo |
-| `/libros/:id` | `DetalleLibro.vue` | Ficha de un solo libro, según el id de la URL |
+| `/` | `InicioView.vue` | Bienvenida, catálogo de libros y filtro por categoría |
+| `/agregar` | `AgregarLibros.vue` | Formulario para agregar un libro (ruta protegida) |
+| `/libros/:id` | `DetalleLibro.vue` | Ficha de un libro, según el id de la URL |
+| `/login` | `LoginView.vue` | Inicio de sesión |
+| `/registro` | `RegistroView.vue` | Creación de cuenta |
+| `/:pathMatch(.*)*` | `NoEncontradoView.vue` | Página 404, para cualquier URL no definida |
 
 Como el router usa modo hash, las URL se ven así: `http://localhost:8080/#/libros/2`.
 
@@ -37,69 +45,66 @@ Como el router usa modo hash, las URL se ven así: `http://localhost:8080/#/libr
 
 ```
 src/
+├── api/
+│   └── index.js               # Instancia de axios (baseURL: http://localhost:3001)
 ├── components/
-│   ├── FormularioLibro.vue   # Formulario con v-model y vista previa
-│   └── TarjetaLibro.vue      # Tarjeta de un libro
+│   ├── FormularioLibro.vue    # Formulario con v-model y vista previa (Options API)
+│   └── TarjetaLibro.vue       # Tarjeta de un libro, con imagen y acciones
 ├── router/
-│   └── index.js              # Definición de rutas
+│   └── index.js               # Rutas y guarda de autenticación
+├── store/
+│   ├── index.js
+│   └── modules/
+│       ├── libros.js          # Estado y acciones de los libros (vía API)
+│       ├── filtros.js         # Categoría seleccionada en el filtro
+│       └── auth.js            # Sesión del usuario (login, registro, logout)
 ├── views/
 │   ├── InicioView.vue
-│   ├── ListaLibros.vue
-│   └── DetalleLibro.vue
-├── App.vue                   # Saludo, contador, menú, <router-view> y lista de libros
+│   ├── AgregarLibros.vue
+│   ├── DetalleLibro.vue
+│   ├── LoginView.vue
+│   ├── RegistroView.vue
+│   └── NoEncontradoView.vue
+├── App.vue                    # Menú lateral, sesión y <router-view>
 └── main.js
+db.json                        # "Base de datos" de json-server: libros y usuarios
 ```
 
-## Resumen por lección
+## Cómo ejecutarlo
 
-### Lección 1: Introducción a Vue.js
-- `App.vue` con la estructura `template` / `script` / `style`.
-- Contador con datos reactivos (`data`) y funciones que los modifican (`methods`).
-- Patrón MVVM: el *Model* son los datos de `data()`, la *View* es el `<template>` y el *ViewModel* es Vue, que actualiza la pantalla cuando un dato cambia.
-- Se muestra el nombre del usuario con `{{ nombreUsuario }}`.
+Requiere Node.js y npm. Hacen falta **dos terminales abiertas**: una para la API simulada y otra para la app.
 
-### Lección 2: Templates y rendering
-- `TarjetaLibro.vue` muestra los datos de un libro recibidos por prop y usa `v-bind` (`:libro`, `:key`, `:class`, `:title`).
-- `v-for` para recorrer la lista de libros.
-- `v-if` / `v-else` para mostrar el mensaje "No hay libros disponibles" y para el botón de descripción (solo existe si el libro tiene descripción).
-- `v-show` para mostrar y ocultar la descripción y el catálogo.
+```bash
+git clone https://github.com/catuccini01/Proyecto-Integrador-Booklist.git
+cd Proyecto-Integrador-Booklist
+npm install
+```
 
-### Lección 3: Binding de formularios
-- `FormularioLibro.vue` con `input`, `select` y `textarea`.
-- `v-model` conecta cada campo con el objeto `nuevoLibro`.
-- Vista previa que se actualiza mientras se escribe.
-- Las opciones del `select` se generan con `v-for` desde una lista de categorías.
+Terminal 1 (API simulada, puerto 3001):
+```bash
+npm run mock
+```
 
-### Lección 4: Manejo de eventos
-- `@click` para añadir y eliminar libros.
-- `@submit.prevent` en el formulario, para evitar que la página se recargue.
-- `@keyup.enter` para añadir libros con el teclado.
-- `@click.once` en el aviso de bienvenida, que solo reacciona al primer clic.
-- Comunicación entre componentes con `$emit`: los componentes hijos avisan y `App.vue` es el único que modifica la lista.
+Terminal 2 (la app, puerto 8080):
+```bash
+npm run serve
+```
 
-### Lección 5: Manejo de rutas
-- Vue Router configurado con las rutas `/`, `/libros` y `/libros/:id`.
-- Vistas `InicioView`, `ListaLibros` y `DetalleLibro`.
-- Ruta dinámica con `props: true`, para que `DetalleLibro` reciba el `id` como prop.
-- `<router-link>` para navegar y `<router-view>` para mostrar la vista activa.
-- Un dato calculado (`computed`) busca el libro que corresponde al id de la URL.
+Luego abre `http://localhost:8080`.
 
-## Decisiones tomadas
+## Vuex: los 3 módulos
 
-- **Un solo proyecto por etapas.** Las 5 lecciones se construyeron sobre la misma app, en vez de ejercicios separados, para llegar a una SPA completa.
-- **Vue 3 y Vue CLI 5.** Los enlaces de referencia del enunciado apuntan a la documentación de Vue 3, así que se usó esa versión.
-- **`Libro.vue` se llama `TarjetaLibro.vue`.** Se renombró para cumplir la guía de estilo de Vue, que recomienda nombres de componente de varias palabras. Sigue el mismo estilo que `ListaLibros` y `DetalleLibro`.
-- **Prop `datoLibro`.** Es el nombre con que `TarjetaLibro` recibe cada libro desde `ListaLibros`.
-- **La lista de libros vive en `App.vue`.** Está fuera del `<router-view>`, así que no se pierde al cambiar de pantalla. Las vistas la reciben por props y avisan los cambios con eventos, de modo que hay una sola fuente de datos.
-- **Formulario y tarjeta como componentes independientes.** Se reutilizan dentro de `ListaLibros` y no dependen de cómo se llamen las variables del padre.
-- **Modo hash en el router.** Evita errores 404 al recargar o al publicar en GitHub Pages, sin configurar el servidor.
-- **La lista empieza vacía.** El enunciado no pide libros de ejemplo, y así se ve el mensaje "No hay libros disponibles" al iniciar.
-- **Ids con contador (`siguienteId`).** Cada libro nuevo recibe un id distinto que no se repite, aunque se eliminen libros.
-- **Sin Vuex ni almacenamiento.** El enunciado no lo pide, así que el estado se maneja con props y eventos.
-- **ESLint con prevención de errores solamente.** Para no llenar la pantalla de avisos de estilo.
+- **`libros`**: guarda la lista de libros, si está cargando y si hubo un error. Las acciones (`cargarLibros`, `agregarLibro`, `eliminarLibro`) son las que hablan con la API a través de `axios`; los componentes nunca llaman a la API directamente, pasan siempre por el store.
+- **`filtros`**: guarda la categoría seleccionada en el `<select>` de Inicio.
+- **`auth`**: guarda el usuario que inició sesión (o `null`), y expone las acciones `login`, `registrar` y `cerrarSesion`. El usuario se persiste en `sessionStorage` para no perder la sesión al recargar la página.
+
+## Cómo funciona el acceso
+
+`router/index.js` define una guarda (`router.beforeEach`) que revisa, antes de entrar a cualquier ruta, si esa ruta tiene `meta: { requiereAuth: true }` (como `/agregar`). Si la tiene y no hay sesión iniciada, redirige a `/login` guardando a dónde se quería ir, en `query.redirect`. Al iniciar sesión, `LoginView.vue` lee ese dato y redirige de vuelta.
 
 ## Limitaciones
 
-- Los datos solo existen en memoria: al recargar la página (F5) la lista se vacía.
-- Al recargar en `/#/libros/2` aparece "No se encontró el libro", porque la lista quedó vacía.
-- No hay edición de libros. El enunciado pide añadir, listar, eliminar y ver el detalle.
+- Las contraseñas se guardan en texto plano en `db.json`, sin encriptar. Es aceptable para un proyecto de práctica con una API simulada, pero no es así como se manejaría en una app real.
+- La sesión vive en `sessionStorage`, así que se cierra sola al cerrar la pestaña del navegador.
+- No hay edición de libros, solo agregar, listar, eliminar y ver el detalle.
+- `json-server` guarda los cambios directamente en `db.json`; si compartes el proyecto, cualquiera que lo clone ve los libros (y usuarios) que haya en ese archivo en ese momento.

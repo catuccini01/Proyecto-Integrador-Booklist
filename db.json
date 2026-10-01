@@ -89,5 +89,12 @@
       "img": "/assets/la-seleccion.jpg"
     }
   ],
-  "usuarios": [ ]
+  "usuarios": [
+    {
+      "id": 1,
+      "nombre": "Usuario de prueba",
+      "email": "test@test.com",
+      "password": "test1234"
+    }
+  ]
 }
