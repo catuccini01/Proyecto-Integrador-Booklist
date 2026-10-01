@@ -89,12 +89,5 @@
       "img": "/assets/la-seleccion.jpg"
     }
   ],
-  "usuarios": [
-    {
-      "nombre": "Catalina",
-      "email": "catalina.perez.olivos@gmail.com",
-      "password": "Pulga1234.",
-      "id": 1
-    }
-  ]
+  "usuarios": [ ]
 }
