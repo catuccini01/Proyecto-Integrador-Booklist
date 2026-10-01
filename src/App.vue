@@ -1,137 +1,147 @@
-<template>
+<script setup>
+import { computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import {SquareArrowRightExit} from '@lucide/vue'
 
-  <div id="app">
-    <h1>Booklist</h1>
-    <p>Bienvenido/a, {{ nombreUsuario }}</p>
+const store = useStore()
 
-    <div class="contador">
-      <button @click="restar">-</button>
-      <span>{{ contador }}</span>
-      <button @click="sumar">+</button>
-    </div>
-    
-    <hr>
-    
-    <nav class="menu">
-      <router-link to="/">Inicio</router-link>
-      <router-link to="/libros">Libros</router-link>
-    </nav>
+const usuario = computed(() => store.getters['auth/usuario'])
+const estaAutenticado = computed(() => store.getters['auth/estaAutenticado'])
 
-    <hr>
+onMounted(() => {
+  store.dispatch('libros/cargarLibros')
+})
 
-    <router-view :libros="libros" @agregar="agregarLibro" @eliminar="eliminarLibro" />
-  </div>
-</template>
-
-<script>
-export default{
-  name: "App",
-    data(){
-    return{
-      nombreUsuario: 'Cata',
-      contador: 0,
-      mostrarCatalogo: true,
-      siguienteId: 4,
-      libros: [
-        {
-          id: 1,
-          titulo: 'Cien años de soledad',
-          autor: 'Gabriel García Márquez',
-          categoria: 'Novela',
-          descripcion: 'La historia de la familia Buendía en el pueblo de Macondo.'
-        },
-        {
-          id: 2,
-          titulo: 'El principito',
-          autor: 'Antoine de Saint-Exupéry',
-          categoria: 'Fábula',
-          descripcion: 'Un piloto se encuentra con un pequeño príncipe en el desierto.'
-        },
-        {
-          id: 3,
-          titulo: 'Sapiens',
-          autor: 'Yuval Noah Harari',
-          categoria: 'Historia',
-          descripcion: ''
-        }
-      ]
-    }
-  },
-  methods:{
-    sumar(){
-      this.contador++
-    },
-    restar(){
-      this.contador--
-    },
-    agregarLibro(libro){
-      this.libros.push({id: this.siguienteId,  ...libro})
-      this.siguienteId++
-    },
-    eliminarLibro(id){
-      this.libros = this.libros.filter((libro) => libro.id !== id)
-    },
-    cargarEjemplos(){
-      this.libros.push(
-       {
-          id: 1,
-          titulo: 'Cien años de soledad',
-          autor: 'Gabriel García Márquez',
-          categoria: 'Novela',
-          descripcion: 'La historia de la familia Buendía en el pueblo de Macondo.'
-        },
-        {
-          id: 2,
-          titulo: 'El principito',
-          autor: 'Antoine de Saint-Exupéry',
-          categoria: 'Fábula',
-          descripcion: 'Un piloto se encuentra con un pequeño príncipe en el desierto.'
-        },
-        {
-          id: 3,
-          titulo: 'Sapiens',
-          autor: 'Yuval Noah Harari',
-          categoria: 'Historia',
-          descripcion: ''
-        }
-      )
-    }
-  }
+function cerrarSesion() {
+  store.dispatch('auth/cerrarSesion')
 }
 </script>
 
+<template>
+  <div id="app">
+    
+    <nav class="menu">
+      <template v-if="estaAutenticado">
+        <div>
+          <router-link class="btn-inicio" to="/">
+            <h1>Booklist</h1>
+         </router-link>
+        <p v-if="estaAutenticado">
+           Bienvenido/a, {{ usuario.nombre }}
+        </p>
+        </div>
+        <div class="menu-register">
+
+         
+        <router-link to="/" class="btn-login">Inicio</router-link>
+        <router-link to="/agregar" class="btn-registro">Agregar libro</router-link>
+
+        <button @click="cerrarSesion" class="btn-cerrar-sesion">
+          Cerrar sesión 
+          <SquareArrowRightExit />
+        </button>
+        </div>
+      </template>
+
+      <template v-else>
+       <router-link class="btn-inicio" to="/">
+            <h1>Booklist</h1>
+         </router-link>
+        <div class="row align-items-center justify-content-center">
+          <router-link class="btn-login" to="/login">Iniciar sesión</router-link>
+          <router-link class="btn-registro" to="/registro">Registrarse</router-link>
+        </div>
+      </template>
+    </nav>
+
+
+
+    <div class="vista-general">
+      <router-view />
+    </div>
+  </div>
+</template>
+
 <style>
 #app {
-  font-family: Arial, sans-serif;
+  font-family: "novecento-sans", sans-serif;
   text-align: center;
-  margin-top: 40px;
 }
-.contador button {
-  font-size: 1.2rem;
-  padding: 4px 14px;
-  background-color:blueviolet;
-  border: none;
-  box-shadow: 1px 1px 2px #00000040;
+
+nav{
+  background-color: #fffbf5;
+  position: fixed;
+  height: 100vh;
+  width: 15% !important;
+  z-index: 3;
+  box-shadow: 1px 4px 8px #00000010;
+  padding-block: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1{
+  font-family: "novecento-sans", sans-serif;
+  font-weight: 400 !important;
+  color: #98293B !important;
+}
+
+.vista-general{
+  width: 85% !important;
+  position: absolute;
+  right: 0 !important;
+  z-index: 2;
+ background-color: #fffcf8;
+  min-height: 100vh;
+}
+
+.btn-login{
+  background-color: #888;
   color: white;
-  border-radius: 3px;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 5px;
+  width: 100% !important;
+  margin-bottom: 15px;
+  max-width: 180px !important;
 }
-.contador span {
-  margin: 0 16px;
-  font-size: 1.5rem;
+
+.btn-registro{
+  background-color: #98293B;
+  color: white;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 5px;
+  width: 100% !important;
+    margin-bottom: 15px;
+    max-width: 180px !important;
 }
+
 .vacio {
   color: #888;
   font-style: italic;
 }
-.menu{
-  display: flex;
-  column-gap: 20px;
-  justify-content: center;
-  margin: 10px;
+
+.btn-inicio{
+  text-decoration: none;
 }
 
-.menu a{
-  text-decoration: none;
-  color: black;
+.menu-register{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
 }
+
+.btn-cerrar-sesion{
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+
+}
+
 </style>

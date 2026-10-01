@@ -1,7 +1,8 @@
 <template>
-    <div class="formulario">
-        <h2>Agregar libro</h2>
-
+    <div class="container">
+    <div class="formulario row">
+        
+<div class="col">
         <div class="campo">
             <label for="titulo">Título</label>
             <input 
@@ -36,15 +37,17 @@
 
         <p v-if="error" class="error">{{ error }}</p>
 
-        <button type="button" @click="agregar">Agregar libro</button>
-
-        <div class="vista-previa">
+        </div>
+        <div class="vista-previa col">
             <h3>Vista previa</h3>
             <p><strong>Título:</strong>{{ nuevoLibro.titulo }}</p>
             <p><strong>Autor:</strong>{{ nuevoLibro.autor }}</p>
             <p><strong>Categoría:</strong>{{ nuevoLibro.categoria }}</p>
             <p><strong>Descripción:</strong>{{ nuevoLibro.descripcion }}</p>
         </div>
+    </div>
+            <button class="btn-agregar btn mt-4" type="button" @click="agregar">Agregar libro</button>
+
     </div>
 </template>
 
@@ -60,7 +63,7 @@ export default{
                 categoria: '',
                 descripcion: ''
             },
-            categorias: ['Novela', 'Fábula', 'Historia', 'Ciencia', 'Otro' ],
+           categorias:['Ciencia Ficción', 'Drama', 'Fantasía', 'Romance', 'Novela', 'Otro'],
             error: ''
         }
     },
@@ -87,9 +90,10 @@ export default{
 
 <style scoped>
 .formulario {
-  max-width: 420px;
+  width: 100%;
   margin: 20px auto;
   text-align: left;
+
 }
 .campo {
   margin-bottom: 12px;
@@ -115,4 +119,13 @@ export default{
   padding: 8px 16px;
   margin-top: 16px;
 }
+ .btn-agregar{
+  background-color: #98293B;
+  color: white;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 5px;
+  max-width: 200px;
+
+ }
 </style>

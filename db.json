@@ -1,0 +1,100 @@
+{
+  "libros": [
+    {
+      "id": 1,
+      "titulo": "Oscuros",
+      "autor": "Lauren Kate",
+      "categoria": "Fantasía",
+      "descripcion": "Luce descubre que está atada a Daniel desde hace siglos, en una historia de amor marcada por ángeles caídos.",
+      "img": "/assets/oscuros.jpg"
+    },
+    {
+      "id": 2,
+      "titulo": "Divergente",
+      "autor": "Veronica Roth",
+      "categoria": "Ciencia Ficción",
+      "descripcion": "En una sociedad dividida en facciones, Tris descubre que no encaja en ninguna y debe ocultar su secreto.",
+      "img": "/assets/divergente.jpg"
+    },
+    {
+      "id": 3,
+      "titulo": "Hush, Hush",
+      "autor": "Becca Fitzpatrick",
+      "categoria": "Fantasía",
+      "descripcion": "Nora se siente atraída por Patch, un compañero misterioso que esconde un secreto sobrenatural.",
+      "img": "/assets/hushHush.jpg"
+    },
+    {
+      "id": 4,
+      "titulo": "Bajo la misma estrella",
+      "autor": "John Green",
+      "categoria": "Drama",
+      "descripcion": "Hazel y Gus se conocen en un grupo de apoyo y viven una historia de amor marcada por la enfermedad.",
+      "img": "/assets/bajo-la-misma-estrella.jpg"
+    },
+    {
+      "id": 5,
+      "titulo": "Buscando a Alaska",
+      "autor": "John Green",
+      "categoria": "Drama",
+      "descripcion": "Miles llega a un internado y queda fascinado por Alaska, una chica que cambiará su forma de ver la vida.",
+      "img": "/assets/buscando-a-alaska.jpg"
+    },
+    {
+      "id": 6,
+      "titulo": "El teorema de Katherine",
+      "autor": "John Green",
+      "categoria": "Drama",
+      "descripcion": "Colin, un exniño prodigio, intenta crear una fórmula matemática para predecir sus rupturas amorosas.",
+      "img": "/assets/el-teorema-de-katherine.jpg"
+    },
+    {
+      "id": 7,
+      "titulo": "Ciudades de papel",
+      "autor": "John Green",
+      "categoria": "Drama",
+      "descripcion": "Quentin sale en busca de Margo, su vecina de la infancia, tras encontrar pistas que ella dejó antes de desaparecer.",
+      "img": "/assets/ciudades-de-papel.jpg"
+    },
+    {
+      "id": 8,
+      "titulo": "Noches blancas",
+      "autor": "John Green, Maureen Johnson y Lauren Myracle",
+      "categoria": "Romance",
+      "descripcion": "Tres historias de amor entrelazadas ocurren durante una tormenta de nieve en Nochebuena.",
+      "img": "/assets/noches-blancas.jpg"
+    },
+    {
+      "id": 9,
+      "titulo": "Will Grayson, Will Grayson",
+      "autor": "John Green y David Levithan",
+      "categoria": "Drama",
+      "descripcion": "Dos chicos que se llaman igual se cruzan por casualidad y sus vidas terminan conectadas.",
+      "img": "/assets/will-grayson.jpg"
+    },
+    {
+      "id": 11,
+      "titulo": "¡Buenos días, princesa!",
+      "autor": "Blue Jeans",
+      "categoria": "Romance",
+      "descripcion": "Primer libro de El Club de los Incomprendidos, donde un grupo de amigos del colegio empieza a vivir sus primeros amores y conflictos.",
+      "img": "/assets/buenos-dias-princesa.jpg"
+    },
+    {
+      "id": 13,
+      "titulo": "La Selección",
+      "autor": "Kiera Cass",
+      "categoria": "Novela",
+      "descripcion": "Narra la competencia entre 35 jóvenes para ganarse el corazón del príncipe heredero y convertirse en la futura reina.",
+      "img": "/assets/la-seleccion.jpg"
+    }
+  ],
+  "usuarios": [
+    {
+      "nombre": "Catalina",
+      "email": "catalina.perez.olivos@gmail.com",
+      "password": "Pulga1234.",
+      "id": 1
+    }
+  ]
+}
